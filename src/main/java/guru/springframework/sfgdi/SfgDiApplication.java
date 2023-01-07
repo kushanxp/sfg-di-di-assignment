@@ -1,5 +1,6 @@
 package guru.springframework.sfgdi;
 
+import guru.springframework.sfgdi.config.SfgConfiguration;
 import guru.springframework.sfgdi.controllers.*;
 import guru.springframework.sfgdi.datasource.FakeDataSource;
 import guru.springframework.sfgdi.services.PrototypeBean;
@@ -50,10 +51,28 @@ public class SfgDiApplication {
 		System.out.println(prototypeBean1.getBeanScope());
 
 		System.out.println("----------Property file values-----------");
-		FakeDataSource fakeDataSource = ctx.getBean(FakeDataSource.class);
+		FakeDataSource fakeDataSource = (FakeDataSource) ctx.getBean("fakeDataSource");
 		System.out.println(fakeDataSource.getUserName());
 		System.out.println(fakeDataSource.getPassword());
 		System.out.println(fakeDataSource.getJdbcUrl());
+
+		System.out.println("-------ConfigurationProperties--------");
+		SfgConfiguration sfgConfiguration = ctx.getBean(SfgConfiguration.class);
+		System.out.println(sfgConfiguration.getUsername());
+		System.out.println(sfgConfiguration.getPassword());
+		System.out.println(sfgConfiguration.getJdbcUrl());
+
+		System.out.println("--------- Conf Params-------------");
+		FakeDataSource fake = (FakeDataSource) ctx.getBean("fakeDes");
+		System.out.println(fake.getUserName());
+		System.out.println(fake.getPassword());
+		System.out.println(fake.getJdbcUrl());
+
+		System.out.println("--------- Construction Params---------");
+		FakeDataSource fake2 = (FakeDataSource) ctx.getBean("fakeDesConst");
+		System.out.println(fake2.getUserName());
+		System.out.println(fake2.getPassword());
+		System.out.println(fake2.getJdbcUrl());
 	}
 
 }

@@ -7,16 +7,18 @@ import guru.springframework.sfgdi.repositories.EnglishGreetingRepository;
 import guru.springframework.sfgdi.repositories.EnglishGreetingRepositoryImpl;
 import guru.springframework.sfgdi.services.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Profile;
 
+@EnableConfigurationProperties(SfgConfigurationConstructor.class)
 @ImportResource("classpath:sfgdi-config.xml")
 @Configuration
 public class GreetingServiceConfig {
 
-    @Bean
+    @Bean("fakeDataSource")
     FakeDataSource fakeDataSource(@Value("${guru.username}") String userName, @Value("${guru.password}") String password, @Value("${guru.jdbcurl}") String jdbcUrl) {
         FakeDataSource fakeDataSource = new FakeDataSource();
         fakeDataSource.setUserName(userName);
@@ -24,6 +26,25 @@ public class GreetingServiceConfig {
         fakeDataSource.setJdbcUrl(jdbcUrl);
         return fakeDataSource;
     }
+
+    @Bean("fakeDes")
+    FakeDataSource fakeDes(SfgConfiguration sfgConfiguration) {
+        FakeDataSource fakeDataSource = new FakeDataSource();
+        fakeDataSource.setUserName(sfgConfiguration.getUsername());
+        fakeDataSource.setPassword(sfgConfiguration.getPassword());
+        fakeDataSource.setJdbcUrl(sfgConfiguration.getJdbcUrl());
+        return fakeDataSource;
+    }
+
+    @Bean("fakeDesConst")
+    FakeDataSource fakeDesConst(SfgConfigurationConstructor sfgConfiguration) {
+        FakeDataSource fakeDataSource = new FakeDataSource();
+        fakeDataSource.setUserName(sfgConfiguration.getUsername());
+        fakeDataSource.setPassword(sfgConfiguration.getPassword());
+        fakeDataSource.setJdbcUrl(sfgConfiguration.getJdbcUrl());
+        return fakeDataSource;
+    }
+
     @Bean
     EnglishGreetingRepository englishGreetingRepository() {
         return new EnglishGreetingRepositoryImpl();
